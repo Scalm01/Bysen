@@ -20,7 +20,9 @@ jobs:
           cache: maven
 
       - name: Build & test
-        run: mvn -B clean install test
+        run: |
+          cd Bysen
+          mvn -B clean install test
 
   checkstyle:
     runs-on: ubuntu-latest
@@ -35,4 +37,6 @@ jobs:
           cache: maven
 
       - name: Run Checkstyle
-        run: mvn -B checkstyle:check
+        run: |
+          cd Bysen
+          mvn -B checkstyle:check
