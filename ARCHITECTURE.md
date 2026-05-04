@@ -1,39 +1,36 @@
-# Architecture Overview
+# Bysen Application Architecture
 
-This document provides a visual representation of the system architecture for the Bysen project.
+## Overview
+This document describes the architecture of the Bysen application, highlighting the key flows and processes involved.
 
-## System Architecture Diagram
+## API Flows
 
+### POST /api/packets Flow
+1. Client sends a POST request to /api/packets.
+2. Server validates the request.
+3. Application processes the packet and updates the database.
+4. Confirmation response is sent back to the client.
+
+### GET /api/analytics Flow
+1. Client sends a GET request to /api/analytics.
+2. Server fetches analytics data from the database.
+3. Data is processed and formatted.
+4. Response is sent back to the client with analytics data.
+
+## Server Startup Process
+1. Load configurations and environment variables.
+2. Initialize database connections.
+3. Start listening for incoming requests on the designated port.
+
+## Mermaid Diagram
 ```mermaid
-  graph TD;
-      Client -->|"Request"| API_Endpoint(A);
-      API_Endpoint(A) -->|"Fetch Data"| DB[Database];
-      DB -->|"Response"| API_Endpoint(A);
-      API_Endpoint(A) -->|"Respond"| Client;
-      subgraph Data_Normalization
-          DB -->|"Normalize"| Norm[Normalization Service];
-          Norm -->|"Store"| DB;
-      end
-      API_Endpoint(A) -->|"Operation"| MongoDB[MongoDB Operations];
-      MongoDB -->|"Handling"| Retr[Response Handling];
-      Retr -->|"Response"| API_Endpoint(A);
+graph TD;
+    A[Client Requests] -->|POST /api/packets| B(Database Operations);
+    B --> C[Confirmation Response];
+    A -->|GET /api/analytics| D[Analytics Data];
+    D --> C;
+    style A fill:#f9f,stroke:#333,stroke-width:2px;
+    style B fill:#ccf,stroke:#333,stroke-width:2px;
+    style C fill:#cfc,stroke:#333,stroke-width:2px;
+    style D fill:#fcf,stroke:#333,stroke-width:2px;
 ```
-
-## Architecture Components
-
-- **Client**: The application client making requests
-- **API Endpoint**: Main API entry point handling all requests and responses
-- **Database**: Primary data storage and retrieval
-- **Data Normalization**: Service responsible for data normalization and consistency
-- **MongoDB Operations**: Handling MongoDB-specific operations
-- **Response Handling**: Processing and formatting responses back to the client
-
-## Data Flow
-
-1. Client sends a request to the API Endpoint
-2. API Endpoint fetches data from the Database
-3. Database returns the requested data
-4. Data goes through normalization if needed
-5. MongoDB operations are performed as required
-6. Response is handled and formatted
-7. Final response is sent back to the Client
